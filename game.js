@@ -29,6 +29,12 @@ async function run() {
   canvas.setAttribute('tabindex', '1')
   canvas.focus()
 
+  /* Utility */
+
+  const randomNum = (min, max) => min + (max - min) * Math.random()
+  const randomInt = (min, max) =>
+    Math.ceil(min) + Math.floor((max - Math.ceil(min)) * Math.random())
+
   /* State */
 
   const entities = new Map()
