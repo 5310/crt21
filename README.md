@@ -12,8 +12,9 @@ Except that we decided early on to skip "_that whole Python situation_" for vari
 
 1. [x] Drawing the ‘@’ symbol and moving it around
    1. [x] Setup
-   2. [x] Key input
-   3. [x] Player movement
+   2. [x] Fancy square font
+   3. [x] Key input
+   4. [x] Player movement
 2. [x] The generic Entity, the render functions, and the map
 3. [x] Generating a dungeon
 4. [ ] Field of view
