@@ -71,6 +71,29 @@ async function run() {
   }
   const map = createMap(WIDTH, HEIGHT)
 
+  const placeEntityRandomlyInMap = (
+    entity,
+    map,
+    minX = 0,
+    minY = 0,
+    maxX = WIDTH,
+    maxY = HEIGHT,
+  ) => {
+    let limit = 10000
+    while (limit >= 0) {
+      const x = randomInt(minX, maxX)
+      const y = randomInt(minY, maxY)
+      if (map.get(x, y) === 0) {
+        entity.x = x
+        entity.y = y
+        return
+      }
+    }
+  }
+
+  placeEntityRandomlyInMap(player, map)
+  placeEntityRandomlyInMap(troll, map)
+
   /* Process */
 
   const actions = {
