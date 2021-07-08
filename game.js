@@ -1,13 +1,16 @@
 async function run() {
   /* Setup */
 
+  const WIDTH = 40
+  const HEIGHT = 30
+
   const font = new FontFace('Ugly Terminal 8', 'url(ugly-terminal-8.ttf)')
   await font.load()
   document.fonts.add(font)
 
   const display = new ROT.Display({
-    width: 40,
-    height: 30,
+    width: WIDTH,
+    height: HEIGHT,
     fontSize: 16,
     fontFamily: '"Ugly Terminal 8", monospace',
     forceSquareRatio: true,
@@ -60,7 +63,7 @@ async function run() {
     digger.create((x, y, contents) => map.set(x, y, contents))
     return map
   }
-  const map = createMap(80, 60)
+  const map = createMap(WIDTH, HEIGHT)
 
   /* Process */
 
