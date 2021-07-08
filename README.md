@@ -1,6 +1,6 @@
 # The Complete Roguelike Tutorial 2021 Project
 
-> A "playable" version of this repository is available here: 5310.github.io/crt21/
+> A "playable" version of this repository is available here: [5310.github.io/crt21](https://5310.github.io/crt21)
 
 This repository contains the result of the [r/roguelikedev 2021 run of The Complete Roguelike Tutorial](https://www.reddit.com/r/roguelikedev/comments/o5x585/roguelikedev_does_the_complete_roguelike_tutorial/) that @onnyyonn and I decided to do.
 
