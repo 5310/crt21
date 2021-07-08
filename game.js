@@ -65,17 +65,21 @@ async function run() {
   /* Process */
 
   const actions = {
-    [ROT.KEYS.VK_RIGHT]: { type: 'move', x: +1, y: 0 },
-    [ROT.KEYS.VK_LEFT]: { type: 'move', x: -1, y: 0 },
-    [ROT.KEYS.VK_DOWN]: { type: 'move', x: 0, y: +1 },
-    [ROT.KEYS.VK_UP]: { type: 'move', x: 0, y: -1 },
+    [ROT.KEYS.VK_RIGHT]: { type: 'move', dx: +1, dy: 0 },
+    [ROT.KEYS.VK_LEFT]: { type: 'move', dx: -1, dy: 0 },
+    [ROT.KEYS.VK_DOWN]: { type: 'move', dx: 0, dy: +1 },
+    [ROT.KEYS.VK_UP]: { type: 'move', dx: 0, dy: -1 },
   }
   const act = (action) => {
     switch (action?.type) {
       case 'move':
-        const { x, y } = action
-        player.x += x
-        player.y += y
+        const { dx, dy } = action
+        const x_ = player.x + dx
+        const y_ = player.y + dy
+        if (map.get(x_, y_) === 0) {
+          player.x = x_
+          player.y = y_
+        }
         break
     }
   }
