@@ -28,17 +28,23 @@ async function run() {
 
   /* State */
 
-  const createEntity = (type, x, y) => ({ id: ++createEntity.id, type, x, y })
+  const entities = new Map()
+  const createEntity = (type, x, y) => {
+    const id = ++createEntity.id
+    const entity = { id, type, x, y }
+    entities.set(id, entity)
+    return entity
+  }
   createEntity.id = 0
-
-  const player = createEntity('player', 5, 4)
-  const troll = createEntity('troll', 20, 10)
 
   const visuals = {
     player: ['@', 'hsl(60, 100%, 50%)'],
     troll: ['T', 'hsl(120, 60%, 50%)'],
     orc: ['o', 'hsl(100, 30%, 50%)'],
   }
+
+  const player = createEntity('player', 5, 4)
+  const troll = createEntity('troll', 20, 10)
 
   /* Process */
 
@@ -64,8 +70,9 @@ async function run() {
   }
   const draw = () => {
     display.clear()
-    drawEntity(player)
-    drawEntity(troll)
+    for (const entity of entities.values()) {
+      drawEntity(entity)
+    }
   }
   draw()
 }
