@@ -123,11 +123,6 @@ async function run() {
     troll: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
     orc: { ch: 'o', fg: 'hsl(100, 30%, 50%)', bg: null },
   }
-  const drawEntity = (entity) => {
-    const { ch, fg, bg } = entityVisuals[entity.type]
-    display.drawOver(entity.x, entity.y, ch, fg, bg)
-  }
-
   const mapVisuals = {
     // wall
     [true]: {
@@ -145,24 +140,28 @@ async function run() {
   const draw = () => {
     display.clear()
 
-    const lightMap = new Map()
-
+    const lightMap = new Map() // map key to 0.0–1.0
     fov.compute(player.x, player.y, 10, (x, y, r, visibility) => {
       lightMap.set(map.key(x, y), visibility)
     })
+
+    const glyphMap = new Map() // map key to [char, fg, optional bg]
+    for (const entity of entities.values()) {
+      glyphMap.set(map.key(entity.x, entity.y), entityVisuals[entity.type])
+    }
 
     for (let y = 0; y < map.height; y++) {
       for (let x = 0; x < map.width; x++) {
         const lit = lightMap.get(map.key(x, y)) > 0.0
         const wall = map.get(x, y) !== 0
+        const glyph = glyphMap.get(map.key(x, y))
         let { ch, fg, bg } = mapVisuals[wall][lit]
+        if (glyph) {
+          ch = lit ? glyph.ch : ch
+          fg = glyph.fg
+          bg = glyph.bg || bg
+        }
         display.draw(x, y, ch, fg, bg)
-      }
-    }
-
-    for (const entity of entities.values()) {
-      if (lightMap.get(map.key(entity.x, entity.y)) > 0.0) {
-        drawEntity(entity)
       }
     }
   }
