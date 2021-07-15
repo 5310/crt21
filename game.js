@@ -118,35 +118,55 @@ async function run() {
 
   /* Draw */
 
-  const drawMap = (map) => {
-    for (let y = 0; y < map.height; y++) {
-      for (let x = 0; x < map.width; x++) {
-        if (map.get(x, y)) {
-          display.draw(x, y, '⨉', 'hsl(60, 10%, 40%)', 'gray')
-        } else {
-          display.draw(x, y, '·', 'hsl(60, 50%, 50%)', 'black')
-        }
-      }
-    }
-  }
-
   const entityVisuals = {
-    player: ['@', 'hsl(60, 100%, 50%)'],
-    troll: ['T', 'hsl(120, 60%, 50%)'],
-    orc: ['o', 'hsl(100, 30%, 50%)'],
+    player: { ch: '@', fg: 'hsl(60, 100%, 50%)', bg: null },
+    troll: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
+    orc: { ch: 'o', fg: 'hsl(100, 30%, 50%)', bg: null },
   }
   const drawEntity = (entity) => {
-    const [ch, fg, bg] = entityVisuals[entity.type]
-    display.draw(entity.x, entity.y, ch, fg, bg)
+    const { ch, fg, bg } = entityVisuals[entity.type]
+    display.drawOver(entity.x, entity.y, ch, fg, bg)
   }
+
+  const mapVisuals = {
+    // wall
+    [true]: {
+      [true]: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 8%)' },
+      [false]: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 0%)' },
+    },
+    // floor
+    [false]: {
+      [true]: { ch: '·', fg: 'hsl(52, 30%, 40%)', bg: 'hsl(52, 30%, 20%)' },
+      [false]: { ch: ' ', fg: null, bg: 'hsl(52, 0%, 15%)' },
+    },
+  }
+  const fov = new ROT.FOV.PreciseShadowcasting((x, y) => map.get(x, y) === 0)
 
   const draw = () => {
     display.clear()
-    drawMap(map)
+
+    const lightMap = new Map()
+
+    fov.compute(player.x, player.y, 10, (x, y, r, visibility) => {
+      lightMap.set(map.key(x, y), visibility)
+    })
+
+    for (let y = 0; y < map.height; y++) {
+      for (let x = 0; x < map.width; x++) {
+        const lit = lightMap.get(map.key(x, y)) > 0.0
+        const wall = map.get(x, y) !== 0
+        let { ch, fg, bg } = mapVisuals[wall][lit]
+        display.draw(x, y, ch, fg, bg)
+      }
+    }
+
     for (const entity of entities.values()) {
-      drawEntity(entity)
+      if (lightMap.get(map.key(entity.x, entity.y)) > 0.0) {
+        drawEntity(entity)
+      }
     }
   }
   draw()
+  console.log(display)
 }
 run()
