@@ -70,6 +70,7 @@ async function run() {
     return map
   }
   const map = createMap(WIDTH, HEIGHT)
+  const exploreMap = new Map()
 
   const placeEntityRandomlyInMap = (
     entity,
@@ -125,14 +126,15 @@ async function run() {
   }
   const mapVisuals = {
     // wall
-    [true]: {
-      [true]: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 8%)' },
-      [false]: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 0%)' },
+    wall: {
+      lit: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 8%)' },
+      unlit: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 0%)' },
     },
     // floor
-    [false]: {
-      [true]: { ch: '·', fg: 'hsl(52, 30%, 40%)', bg: 'hsl(52, 30%, 20%)' },
-      [false]: { ch: ' ', fg: null, bg: 'hsl(52, 0%, 15%)' },
+    floor: {
+      lit: { ch: '·', fg: 'hsl(52, 30%, 40%)', bg: 'hsl(52, 30%, 20%)' },
+      unlit: { ch: ' ', fg: null, bg: 'hsl(0, 0%, 0%)' },
+      explored: { ch: ' ', fg: null, bg: 'hsl(52, 0%, 15%)' },
     },
   }
   const fov = new ROT.FOV.PreciseShadowcasting((x, y) => map.get(x, y) === 0)
@@ -155,7 +157,12 @@ async function run() {
         const lit = lightMap.get(map.key(x, y)) > 0.0
         const wall = map.get(x, y) !== 0
         const glyph = glyphMap.get(map.key(x, y))
-        let { ch, fg, bg } = mapVisuals[wall][lit]
+        if (!wall && lit) exploreMap.set(map.key(x, y), true)
+        const explored = exploreMap.get(map.key(x, y))
+        let { ch, fg, bg } =
+          mapVisuals[wall ? 'wall' : 'floor'][
+            explored ? 'explored' : lit ? 'lit' : 'unlit'
+          ]
         if (glyph) {
           ch = lit ? glyph.ch : ch
           fg = glyph.fg
