@@ -46,8 +46,13 @@ async function run() {
   }
   createEntity.id = 0
 
-  const player = createEntity('player', 5, 4)
-  const troll = createEntity('troll', 20, 10)
+  const entityAt = (x, y) => {
+    for (const entity of entities.values()) {
+      if (entity.x === x && entity.y === y) return entity
+    }
+    return
+  }
+
 
   const createMap = (width, height) => {
     const map = {
@@ -84,7 +89,7 @@ async function run() {
     while (limit >= 0) {
       const x = randomInt(minX, maxX)
       const y = randomInt(minY, maxY)
-      if (map.get(x, y) === 0) {
+      if (map.get(x, y) === 0 && !entityAt(x, y)) {
         entity.x = x
         entity.y = y
         return
@@ -92,8 +97,8 @@ async function run() {
     }
   }
 
+  const player = createEntity('player', 5, 4)
   placeEntityRandomlyInMap(player, map)
-  placeEntityRandomlyInMap(troll, map)
 
   /* Process */
 
