@@ -164,6 +164,14 @@ async function run() {
     }
   }
 
+  const enemiesMove = () => {
+    for (let entity of entities) {
+      if (entity !== player) {
+        console.log(`The ${entity.type} ponders the meaning of its existence.`)
+      }
+    }
+  }
+
   /* Draw */
 
   const mapVisuals = {
