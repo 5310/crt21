@@ -54,6 +54,19 @@ async function run() {
   }
 
 
+  const createMonsters = (room, maxMonstersPerRoom) => {
+    console.log(room)
+    const numMonsters = randomInt(0, maxMonstersPerRoom)
+    for (let i = 0; i < numMonsters; i++) {
+      const x = randomInt(room.getLeft(), room.getRight())
+      const y = randomInt(room.getTop(), room.getBottom())
+      if (!entityAt(x, y)) {
+        const type = randomInt(0, 3) === 0 ? 'troll' : 'orc'
+        createEntity(type, x, y)
+      }
+    }
+  }
+
   const createMap = (width, height) => {
     const map = {
       width,
@@ -74,6 +87,11 @@ async function run() {
     digger.create((x, y, contents) => map.set(x, y, contents))
     map.rooms = digger.getRooms()
     map.corridors = digger.getCorridors()
+
+    for (let room of map.rooms) {
+      createMonsters(room, 3)
+    }
+
     return map
   }
   const map = createMap(WIDTH, HEIGHT)
