@@ -53,6 +53,20 @@ async function run() {
     return
   }
 
+  const entityProps = {
+    player: {
+      blocks: true,
+      visuals: { ch: '@', fg: 'hsl(60, 100%, 50%)', bg: null },
+    },
+    troll: {
+      blocks: true,
+      visuals: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
+    },
+    orc: {
+      blocks: true,
+      visuals: { ch: 'o', fg: 'hsl(100, 30%, 50%)', bg: null },
+    },
+  }
 
   const createMonsters = (room, maxMonstersPerRoom) => {
     console.log(room)
@@ -135,8 +149,8 @@ async function run() {
         const x_ = player.x + dx
         const y_ = player.y + dy
         if (map.get(x_, y_) === 0) {
-          player.x = x_
-          player.y = y_
+            player.x = x_
+            player.y = y_
         }
         break
     }
@@ -144,11 +158,6 @@ async function run() {
 
   /* Draw */
 
-  const entityVisuals = {
-    player: { ch: '@', fg: 'hsl(60, 100%, 50%)', bg: null },
-    troll: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
-    orc: { ch: 'o', fg: 'hsl(100, 30%, 50%)', bg: null },
-  }
   const mapVisuals = {
     // wall
     wall: {
@@ -174,7 +183,10 @@ async function run() {
 
     const glyphMap = new Map() // map key to [char, fg, optional bg]
     for (const entity of entities.values()) {
-      glyphMap.set(map.key(entity.x, entity.y), entityVisuals[entity.type])
+      glyphMap.set(
+        map.key(entity.x, entity.y),
+        entityProps[entity.type].visuals,
+      )
     }
 
     for (let y = 0; y < map.height; y++) {
