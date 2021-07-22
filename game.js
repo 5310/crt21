@@ -149,8 +149,16 @@ async function run() {
         const x_ = player.x + dx
         const y_ = player.y + dy
         if (map.get(x_, y_) === 0) {
+          const target = entityAt(x_, y_)
+          if (target && entityProps[target.type].blocks) {
+            console.log(
+              `You kick the ${target.type} in the shins, much to its annoyance!`,
+            )
+            // TODO: draw this to the screen
+          } else {
             player.x = x_
             player.y = y_
+          }
         }
         break
     }
