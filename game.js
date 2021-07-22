@@ -72,6 +72,8 @@ async function run() {
 
     const digger = new ROT.Map.Digger(width, height)
     digger.create((x, y, contents) => map.set(x, y, contents))
+    map.rooms = digger.getRooms()
+    map.corridors = digger.getCorridors()
     return map
   }
   const map = createMap(WIDTH, HEIGHT)
