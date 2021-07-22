@@ -135,6 +135,14 @@ async function run() {
 
   /* Process */
 
+  const enemiesMove = () => {
+    for (let entity of entities.values()) {
+      if (entity !== player) {
+        console.log(`The ${entity.type} ponders the meaning of its existence.`)
+      }
+    }
+  }
+
   const actions = {
     [ROT.KEYS.VK_RIGHT]: { type: 'move', dx: +1, dy: 0 },
     [ROT.KEYS.VK_LEFT]: { type: 'move', dx: -1, dy: 0 },
@@ -159,15 +167,8 @@ async function run() {
             player.y = y_
           }
         }
+        enemiesMove()
         break
-    }
-  }
-
-  const enemiesMove = () => {
-    for (let entity of entities) {
-      if (entity !== player) {
-        console.log(`The ${entity.type} ponders the meaning of its existence.`)
-      }
     }
   }
 
