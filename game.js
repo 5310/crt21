@@ -69,7 +69,6 @@ async function run() {
   }
 
   const createMonsters = (room, maxMonstersPerRoom) => {
-    console.log(room)
     const numMonsters = randomInt(0, maxMonstersPerRoom)
     for (let i = 0; i < numMonsters; i++) {
       const x = randomInt(room.getLeft(), room.getRight())
@@ -226,6 +225,5 @@ async function run() {
     }
   }
   draw()
-  console.log(display)
 }
 run()
