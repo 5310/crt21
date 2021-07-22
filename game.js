@@ -35,6 +35,14 @@ async function run() {
   const randomInt = (min, max) =>
     Math.ceil(min) + Math.floor((max - Math.ceil(min)) * Math.random())
 
+  const print = (message) => {
+    const messages = document.querySelector('#messages')
+    const p = document.createElement('p')
+    p.innerText = message
+    messages.appendChild(p)
+    messages.scrollTo(0, messages.scrollHeight)
+  }
+
   /* State */
 
   const entities = new Map()
@@ -138,7 +146,7 @@ async function run() {
   const enemiesMove = () => {
     for (let entity of entities.values()) {
       if (entity !== player) {
-        console.log(`The ${entity.type} ponders the meaning of its existence.`)
+        print(`The ${entity.type} ponders the meaning of its existence.`)
       }
     }
   }
@@ -158,7 +166,7 @@ async function run() {
         if (map.get(x_, y_) === 0) {
           const target = entityAt(x_, y_)
           if (target && entityProps[target.type].blocks) {
-            console.log(
+            print(
               `You kick the ${target.type} in the shins, much to its annoyance!`,
             )
             // TODO: draw this to the screen

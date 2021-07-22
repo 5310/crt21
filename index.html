@@ -1,6 +1,9 @@
-<figure id="game"></figure>
+<main>
+  <figure id="game"></figure>
+  <div id="messages"></div>
+</main>
 <script src="rot.js"></script>
-<script type=module src="game.js"></script>
+<script type="module" src="game.js"></script>
 <style>
   * {
     box-sizing: border-box;
@@ -14,5 +17,17 @@
     place-items: center;
     background: #333;
   }
-  
+  #messages {
+    width: 640px;
+    height: 11em;
+    padding: 1em;
+    overflow-y: scroll;
+    font-family: monospace;
+    color: white;
+    background: #0005;
+  }
+  #messages > * {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 </style>
