@@ -66,12 +66,12 @@ async function run() {
     player: {
       blocks: true,
       visuals: { ch: '@', fg: 'hsl(60, 100%, 50%)', bg: null },
-      stats: { hp: 15, defense: 1, attack: [1, 2, 2, 3, 3, 3, 6] },
+      stats: { hp: 30, defense: 1, attack: [1, 2, 2, 3, 3, 3, 6] },
     },
     troll: {
       blocks: true,
       visuals: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
-      stats: { hp: 7, defense: 2, attack: [1, 2, 2, 6] },
+      stats: { hp: 7, defense: 2, attack: [1, 2, 2, 4] },
     },
     orc: {
       blocks: true,
@@ -150,7 +150,23 @@ async function run() {
   const enemiesMove = () => {
     for (let entity of entities.values()) {
       if (entity !== player) {
-        // print(`The ${entity.type} ponders the meaning of its existence.`)
+        const x_ =
+          entity.x + (player.x > entity.x ? 1 : player.x < entity.x ? -1 : 0)
+        const y_ =
+          entity.y + (player.y > entity.y ? 1 : player.y < entity.y ? -1 : 0)
+        if (map.get(x_, y_) === 0) {
+          const target = entityAt(x_, y_)
+          if (target && entityProps[target.type].blocks) {
+            if (target === player) {
+              const hit = randomElement(entityProps[entity.type].stats.attack)
+              target.hit += hit
+              print(`The ${entity.type} strikes you for ${hit} points!`)
+            }
+          } else {
+            entity.x = x_
+            entity.y = y_
+          }
+        }
       }
     }
   }
@@ -165,6 +181,7 @@ async function run() {
         entity.hit = 0
       }
       if (entity.damage >= stats.hp) {
+        entity.dead = true
         entities.delete(id)
         if (entity.type === 'player') {
           print(`You have died!`)
@@ -182,6 +199,7 @@ async function run() {
     [ROT.KEYS.VK_UP]: { type: 'move', dx: 0, dy: -1 },
   }
   const act = (action) => {
+    if (player.dead) return
     switch (action?.type) {
       case 'move':
         const { dx, dy } = action
