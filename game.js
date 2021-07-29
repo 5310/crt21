@@ -34,6 +34,7 @@ async function run() {
   const randomNum = (min, max) => min + (max - min) * Math.random()
   const randomInt = (min, max) =>
     Math.ceil(min) + Math.floor((max - Math.ceil(min)) * Math.random())
+  const randomElement = (xs) => xs[randomInt(0, xs.length)]
 
   const print = (message) => {
     const messages = document.querySelector('#messages')
@@ -48,7 +49,7 @@ async function run() {
   const entities = new Map()
   const createEntity = (type, x, y) => {
     const id = ++createEntity.id
-    const entity = { id, type, x, y }
+    const entity = { id, type, x, y, hit: 0, damage: 0 }
     entities.set(id, entity)
     return entity
   }
@@ -65,14 +66,17 @@ async function run() {
     player: {
       blocks: true,
       visuals: { ch: '@', fg: 'hsl(60, 100%, 50%)', bg: null },
+      stats: { hp: 15, defense: 1, attack: [1, 2, 2, 3, 3, 3, 6] },
     },
     troll: {
       blocks: true,
       visuals: { ch: 'T', fg: 'hsl(120, 60%, 50%)', bg: null },
+      stats: { hp: 7, defense: 2, attack: [1, 2, 2, 6] },
     },
     orc: {
       blocks: true,
       visuals: { ch: 'o', fg: 'hsl(100, 30%, 50%)', bg: null },
+      stats: { hp: 20, defense: 0, attack: [0, 0, 2, 3, 6] },
     },
   }
 
@@ -146,7 +150,27 @@ async function run() {
   const enemiesMove = () => {
     for (let entity of entities.values()) {
       if (entity !== player) {
-        print(`The ${entity.type} ponders the meaning of its existence.`)
+        // print(`The ${entity.type} ponders the meaning of its existence.`)
+      }
+    }
+  }
+
+  const death = () => {
+    console.log('processing death')
+    for (const id of entities.keys()) {
+      const entity = entities.get(id)
+      const stats = entityProps[entity.type].stats
+      if (entity.hit) {
+        entity.damage += entity.hit - stats.defense
+        entity.hit = 0
+      }
+      if (entity.damage >= stats.hp) {
+        entities.delete(id)
+        if (entity.type === 'player') {
+          print(`You have died!`)
+        } else {
+          print(`The ${entity.type} dies!`)
+        }
       }
     }
   }
@@ -166,16 +190,16 @@ async function run() {
         if (map.get(x_, y_) === 0) {
           const target = entityAt(x_, y_)
           if (target && entityProps[target.type].blocks) {
-            print(
-              `You kick the ${target.type} in the shins, much to its annoyance!`,
-            )
-            // TODO: draw this to the screen
+            const hit = randomElement(entityProps.player.stats.attack)
+            target.hit += hit
+            print(`You attack the ${target.type} for ${hit} points!`)
           } else {
             player.x = x_
             player.y = y_
           }
         }
         enemiesMove()
+        death()
         break
     }
   }
