@@ -1,5 +1,7 @@
 # The Complete Roguelike Tutorial 2021 Project
 
+> ❕ I've had my fill with this now. It was fun, but that's it from me!
+
 > A "playable" version of this repository is available here: [5310.github.io/crt21](https://5310.github.io/crt21)
 
 This repository contains the result of the [r/roguelikedev 2021 run of The Complete Roguelike Tutorial](https://www.reddit.com/r/roguelikedev/comments/o5x585/roguelikedev_does_the_complete_roguelike_tutorial/) that @onnyyonn and I decided to do.
@@ -18,9 +20,9 @@ Except that we decided early on to skip "_that whole Python situation_" for vari
 2. [x] The generic Entity, the render functions, and the map
 3. [x] Generating a dungeon
 4. [x] Field of view
-5. [ ] Placing enemies and kicking them (harmlessly)
-   1. [ ] Console
-6. [ ] Doing (and taking) some damage
+5. [x] Placing enemies and kicking them (harmlessly)
+   1. [x] Console
+6. [x] Doing (and taking) some damage
 7. [ ] Creating the Interface
    1. [ ] Health bar
    2. [ ] Message area, part 2
