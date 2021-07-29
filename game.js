@@ -46,7 +46,7 @@ async function run() {
 
   /* State */
 
-  const end = false
+  let end = false
 
   const entities = new Map()
   const createEntity = (type, x, y) => {
@@ -181,6 +181,11 @@ async function run() {
       if (entity.hit) {
         entity.damage += entity.hit - stats.defense
         entity.hit = 0
+        if (entity === player) {
+          print(
+            `You have ${entityProps.player.stats.hp - player.damage} HP left.`,
+          )
+        }
       }
       if (entity.damage >= stats.hp) {
         entities.delete(id)
