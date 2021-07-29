@@ -46,6 +46,8 @@ async function run() {
 
   /* State */
 
+  const end = false
+
   const entities = new Map()
   const createEntity = (type, x, y) => {
     const id = ++createEntity.id
@@ -181,14 +183,18 @@ async function run() {
         entity.hit = 0
       }
       if (entity.damage >= stats.hp) {
-        entity.dead = true
         entities.delete(id)
         if (entity.type === 'player') {
+          end = true
           print(`You have died!`)
         } else {
           print(`The ${entity.type} dies!`)
         }
       }
+    }
+    if (entities.keys().length === 1) {
+      end = true
+      print('Congratulations, you have cleared out this dungeon!')
     }
   }
 
@@ -199,7 +205,7 @@ async function run() {
     [ROT.KEYS.VK_UP]: { type: 'move', dx: 0, dy: -1 },
   }
   const act = (action) => {
-    if (player.dead) return
+    if (end) return
     switch (action?.type) {
       case 'move':
         const { dx, dy } = action
